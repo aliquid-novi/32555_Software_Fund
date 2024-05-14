@@ -13,4 +13,18 @@ class DataBase():
         content_list = fileHandler.readlines()
         print(content_list)
         fileHandler.close()
+
+## Update Database class
+class Updated_DataBase():
+    def __init__(self):
+        self.filename = "students.data.txt"
+
+    def write(self, txt):
+        with open(self.filename, "a") as fileHandler:
+            fileHandler.write(txt + "\n")
+
+    def read(self):
+        with open(self.filename, "r") as fileHandler:
+            content_list = fileHandler.readlines()
+        return content_list
     
