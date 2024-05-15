@@ -1,4 +1,5 @@
 # The University System
+# import Student_Course_System
 
 class UniversitySystem:
     def __init__(self):
@@ -27,7 +28,7 @@ class UniversitySystem:
             if choice == 'x':
                 admin_running = False  
             #else:
-            #    print("Function not implemented.")
+            #    print("Function not implementedsS.")
 
     def student_menu(self):
         student_running = True

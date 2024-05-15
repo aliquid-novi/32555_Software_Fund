@@ -28,7 +28,7 @@ class SubjectClass():
         
         return mark, grade
 
-class DataBase(): # Will have to work with Simon on this one
+class DataBase(): 
     def __init__(self):
         self.filename = "students.data.txt"
 
