@@ -1,30 +1,19 @@
-class DataBase():
-    
-    def write(self, txt):
-        fileHandler = open("students.data.txt", "a")
-        fileHandler.write(txt)
-        fileHandler.write("\n")
-        fileHandler.close()
-        
-    def read(self):
-        fileHandler = open("students.data.txt", "r")
-        content = fileHandler.read()
-        print(content)
-        content_list = fileHandler.readlines()
-        print(content_list)
-        fileHandler.close()
-
 ## Update Database class
-class Updated_DataBase():
+class DataBase():
     def __init__(self):
-        self.filename = "students.data.txt"
+        self.filename = "students.data"
 
-    def write(self, txt):
+    def check_file(self): # Check if file exists, if not, creates it
+        pass 
+    def write(self, txt): # Write objetcs to the file "students.data"
         with open(self.filename, "a") as fileHandler:
             fileHandler.write(txt + "\n")
 
-    def read(self):
+    def read(self): # Read objects from the file "students.data"
         with open(self.filename, "r") as fileHandler:
             content_list = fileHandler.readlines()
         return content_list
+    
+    def clear_file(self): # Clear the objects from the file "students.data"
+        pass
     
