@@ -28,25 +28,49 @@ class SubjectClass():
         
         return mark, grade
 
-class DataBase(): 
-    def __init__(self):
-        self.filename = "students.data.txt"
+class DataBase:
+
+    def __init__(self, filename="student.data"):
+        self.filename = filename
+        self.check_and_create_file()
+
+    def check_and_create_file(self):
+        if not os.path.exists(self.filename):
+            with open(self.filename, 'w') as file:
+                file.write("")  # Create an empty file
+            print(f"File '{self.filename}' created.")
+        else:
+            print(f"File '{self.filename}' already exists.")
 
     def write(self, txt):
-        with open(self.filename, "a") as fileHandler:
-            fileHandler.write(txt + "\n")
+        with open(self.filename, 'w') as fileHandler:
+            json.dump(txt, fileHandler, indent=2)
+        print(f"Data written to {self.filename}")
 
     def read(self):
-        with open(self.filename, "r") as fileHandler:
-            content_list = fileHandler.readlines()
-        return content_list
+        try:
+            with open(self.filename, 'r') as fileHandler:
+                if os.stat(self.filename).st_size == 0:  # Check if the file is empty
+                    print("File is empty.")
+                    return None
+                json_obj = json.load(fileHandler)
+                # print(json.dumps(json_obj, indent=4))
+                return json_obj
+        except json.JSONDecodeError:
+            print("Error: File contains invalid JSON.")
+        except FileNotFoundError:
+            print(f"File '{self.filename}' does not exist.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 class Backend():
     "Needs 'db' DataBase object to perform get_count function"
 
-    def __init__(self, database):
+    def __init__(self, email):
         self.filename = 'students.data.txt'
-        self.db = database
+        self.db = DataBase()
+        students = self.db.read()
+        self.student_file = students['students'][email]
 
     @staticmethod
     def print_col(text, colour):
@@ -140,8 +164,9 @@ class Backend():
 
 class StuCourseSys():
 
-    def __init__(self):
-        self.db = DataBase()
+    def __init__(self, email):
+
+        self.db = DataBase(email)
         self.be = Backend(self.db)
         self.contents = self.db.read()
         self.user_input = self.be.standard_user_input()
