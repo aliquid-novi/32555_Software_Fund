@@ -1,11 +1,7 @@
-# Student Course System Criteria # 
-
-# Tracking Subject enrolment is tracked - DOUBLE CHECK THIS
-# Error Handling Exceptions, errors, logical scenarios are handled - DOUBLE CHECK THIS 
+# Libraries
 import random
 import os
 import json
-# import DataBase
 
 class SubjectClass():
 
@@ -30,9 +26,9 @@ class SubjectClass():
             grade = 'HD'
         
         return mark, grade
-
+    
 class DataBase:
-    def __init__(self, filename="student-Copy1.data"):
+    def __init__(self, filename="student.data"):
         self.filename = filename
         self.check_and_create_file()
 
@@ -70,12 +66,10 @@ class Backend():
     "Needs 'db' DataBase object to perform get_count function"
 
     def __init__(self, email):
-        # self.db = DataBase()
-        self.filename = 'students-Copy1.data'
+        self.filename = 'students.data'
         self.db = DataBase()
         self.students = self.db.read()
         self.student = email
-        # self.student_file = students['students'][email]
 
     @staticmethod
     def print_col(text, colour):
@@ -95,8 +89,16 @@ class Backend():
         user_input = input()
         return user_input
     
+    def check_sub(self):
+        data = self.students
+        if 'subjects' not in data['students'][self.student]:
+            return False
+
     def get_count(self):
-        return len(self.students['students'][self.student]['subjects'])
+        if self.check_sub() == True:
+            return len(self.students['students'][self.student]['subject'])
+        else:
+            return 0
     
     @staticmethod
     def update_password():
@@ -113,7 +115,7 @@ class Backend():
         contents = self.db.read()
         if subject_count > 0:
             Backend.print_col(f"Showing {subject_count} subjects", "yellow")
-            subjects = data['students'][email]['subjects']  
+            subjects = data['students'][self.student]['subjects']  
             for i in range(len(subjects)):
                 print(f"  Subject::{subjects[i]['subject']} -- mark = {subjects[i]['mark']} -- grade == {subjects[i]['grade']}")
                 
@@ -158,7 +160,6 @@ class Backend():
                 Backend.print_col("Error: Student data not found.", "red")
                 return
 
-    
     def enrollment(self):
         subject_count = Backend.get_count(self)
         if subject_count >= 4: # Error Handling
@@ -191,8 +192,8 @@ class StuCourseSys():
 
     def __init__(self, email):
 
-        self.db = DataBase(email)
-        self.be = Backend(self.db)
+        self.db = DataBase()
+        self.be = Backend(email)
         self.contents = self.db.read()
         self.user_input = self.be.standard_user_input()
         self.correct_inputs = ['x', 'c', 'e', 'r', 's']
@@ -217,9 +218,9 @@ class StuCourseSys():
                 self.user_input = self.be.show()
 
             elif self.user_input not in self.correct_inputs: # Error Handling
-                self.be.print_col(f"Input {self.user_input} not a valid input. Try again...", "red") 
+                be.print_col(f"Input {self.user_input} not a valid input. Try again...", "red") 
                 self.user_input = self.be.standard_user_input()
 
 if __name__ == "__main__":
-    system = StuCourseSys('alen.jones@university.com')
+    system = StuCourseSys('mark.paje@university.com')
     system.main()
