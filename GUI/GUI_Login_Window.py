@@ -30,7 +30,7 @@ class GUIUniApp:
 
     def load_student_data(self):
         try:
-            with open('students.data.json', 'r') as file:
+            with open('C:/Users/danie/32555_Software_Fund/Student System/student.data', 'r') as file:
                 return json.load(file)
         except Exception as e:
             messagebox.showerror('File Error', 'Failed to read student data: ' + str(e))
