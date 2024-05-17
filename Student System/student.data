@@ -1,1 +1,79 @@
-{"students": {"jialing.huang@university.com": {"first_name": "jialing", "last_name": "huang", "email": "jialing.huang@university.com", "password": "Helloworld123", "student_id": "787244"}, "john.smith@university.com": {"first_name": "john", "last_name": "smith", "email": "john.smith@university.com", "password": "Helloworld123", "student_id": "227569"}, "alen.jones@university.com": {"first_name": "alen", "last_name": "jones", "email": "alen.jones@university.com", "password": "Helloworld123", "student_id": "713228"}}, "used_ids": [227569, 787244, 713228]}
+{
+  "students": {
+    "jialing.huang@university.com": {
+      "first_name": "jialing",
+      "last_name": "huang",
+      "email": "jialing.huang@university.com",
+      "password": "Helloworld123",
+      "student_id": "787244"
+    },
+    "john.smith@university.com": {
+      "first_name": "john",
+      "last_name": "smith",
+      "email": "john.smith@university.com",
+      "password": "Helloworld123",
+      "student_id": "227569",
+      "subjects": [
+        {
+          "subject": "954",
+          "mark": 64,
+          "grade": "P"
+        },
+        {
+          "subject": "321",
+          "mark": 90,
+          "grade": "HD"
+        },
+        {
+          "subject": "996",
+          "mark": 33,
+          "grade": "F"
+        },
+        {
+          "subject": "201",
+          "mark": 51,
+          "grade": "P"
+        },
+        {
+          "subject": "192",
+          "mark": 38,
+          "grade": "F"
+        }
+      ]
+    },
+    "alen.jones@university.com": {
+      "first_name": "alen",
+      "last_name": "jones",
+      "email": "alen.jones@university.com",
+      "password": "Helloworld123",
+      "student_id": "713228",
+      "subjects": [
+        {
+          "subject": "884",
+          "mark": 48,
+          "grade": "F"
+        },
+        {
+          "subject": "512",
+          "mark": 25,
+          "grade": "F"
+        },
+        {
+          "subject": "010",
+          "mark": 31,
+          "grade": "F"
+        },
+        {
+          "subject": "716",
+          "mark": 88,
+          "grade": "HD"
+        }
+      ]
+    }
+  },
+  "used_ids": [
+    227569,
+    787244,
+    713228
+  ]
+}

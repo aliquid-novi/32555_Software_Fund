@@ -1,1 +1,52 @@
-{"students": {"jialing.huang@university.com": {"first_name": "jialing", "last_name": "huang", "email": "jialing.huang@university.com", "password": "Helloworld123", "student_id": "787244"}, "john.smith@university.com": {"first_name": "john", "last_name": "smith", "email": "john.smith@university.com", "password": "Helloworld123", "student_id": "227569"}, "alen.jones@university.com": {"first_name": "alen", "last_name": "jones", "email": "alen.jones@university.com", "password": "Helloworld123", "student_id": "713228"}}, "used_ids": [227569, 787244, 713228]}
+{
+  "students": {
+    "jialing.huang@university.com": {
+      "first_name": "jialing",
+      "last_name": "huang",
+      "email": "jialing.huang@university.com",
+      "password": "Helloworld123",
+      "student_id": "787244"
+    },
+    "john.smith@university.com": {
+      "first_name": "john",
+      "last_name": "smith",
+      "email": "john.smith@university.com",
+      "password": "Helloworld123",
+      "student_id": "227569"
+    },
+    "alen.jones@university.com": {
+      "first_name": "alen",
+      "last_name": "jones",
+      "email": "alen.jones@university.com",
+      "password": "Helloworld123",
+      "student_id": "713228",
+      "subjects": [
+        {
+          "subject": "884",
+          "mark": 48,
+          "grade": "F"
+        },
+        {
+          "subject": "512",
+          "mark": 25,
+          "grade": "F"
+        },
+        {
+          "subject": "010",
+          "mark": 31,
+          "grade": "F"
+        },
+        {
+          "subject": "716",
+          "mark": 88,
+          "grade": "HD"
+        }
+      ]
+    }
+  },
+  "used_ids": [
+    227569,
+    787244,
+    713228
+  ]
+}

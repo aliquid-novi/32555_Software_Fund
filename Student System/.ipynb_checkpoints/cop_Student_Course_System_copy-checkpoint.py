@@ -1,11 +1,7 @@
-# Student Course System Criteria # 
-
-# Tracking Subject enrolment is tracked - DOUBLE CHECK THIS
-# Error Handling Exceptions, errors, logical scenarios are handled - DOUBLE CHECK THIS 
+# Libraries
 import random
 import os
 import json
-# import DataBase
 
 class SubjectClass():
 
@@ -30,52 +26,56 @@ class SubjectClass():
             grade = 'HD'
         
         return mark, grade
-
+    
 class DataBase:
-    def __init__(self, filename="student-Copy1.data"):
-        self.filename = filename
+    def __init__(self, filename="student.data"):
+        self.filename = filename 
         self.check_and_create_file()
 
     def check_and_create_file(self):
-        print("Checking if 'students.data' exists...")
+        print(f"Checking if '{self.filename}' exists...")
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
                 file.write("")  # Create an empty file
             print(f"File '{self.filename}' created.")
         else:
-            print(f"File '{self.filename}'exists.")
+            print(f"File '{self.filename}' exists.")
 
-    def write(self, txt):
-        with open(self.filename, 'w') as fileHandler:
-            json.dump(txt, fileHandler, indent=2)
-        # print(f"Data written to {self.filename}")
+    def write(self, data):
+        try:
+            with open(self.filename, 'w') as fileHandler:
+                json.dump(data, fileHandler, indent=2)
+                fileHandler.flush()
+                os.fsync(fileHandler.fileno())
+            print(f"Data written to {self.filename}")
+        except Exception as e:
+            print(f"An error occurred while writing to the file: {e}")
 
     def read(self):
         try:
+            if not os.path.exists(self.filename):
+                print(f"File '{self.filename}' does not exist.")
+                return {"students": {}, "used_ids": []}
+            if os.stat(self.filename).st_size == 0:
+                print(f"File '{self.filename}' is empty.")
+                return {"students": {}, "used_ids": []}
             with open(self.filename, 'r') as fileHandler:
-                if os.stat(self.filename).st_size == 0:  # Check if the file is empty
-                    print("File is empty.")
-                    return None
-                json_obj = json.load(fileHandler)
-                # print(json.dumps(json_obj, indent=4))
-                return json_obj
+                return json.load(fileHandler)
         except json.JSONDecodeError:
             print("Error: File contains invalid JSON.")
-        except FileNotFoundError:
-            print(f"File '{self.filename}' does not exist.")
+            return {"students": {}, "used_ids": []}
         except Exception as e:
             print(f"An error occurred: {e}")
+            return {"students": {}, "used_ids": []}
 
 class Backend():
     "Needs 'db' DataBase object to perform get_count function"
 
     def __init__(self, email):
-        # self.db = DataBase()
-        self.filename = 'students-Copy1.data'
+        self.filename = 'student.data'
         self.db = DataBase()
         self.students = self.db.read()
         self.student = email
-        # self.student_file = students['students'][email]
 
     @staticmethod
     def print_col(text, colour):
@@ -95,8 +95,16 @@ class Backend():
         user_input = input()
         return user_input
     
+    def check_sub(self):
+        data = self.students
+        if 'subjects' not in data['students'][self.student]:
+            return False
+
     def get_count(self):
-        return len(self.students['students'][self.student]['subjects'])
+        if self.check_sub() == True:
+            return len(self.students['students'][self.student]['subject'])
+        else:
+            return 0
     
     @staticmethod
     def update_password():
@@ -158,7 +166,6 @@ class Backend():
                 Backend.print_col("Error: Student data not found.", "red")
                 return
 
-    
     def enrollment(self):
         subject_count = Backend.get_count(self)
         if subject_count >= 4: # Error Handling
@@ -177,9 +184,10 @@ class Backend():
 
             subjects = {'subject': subject_id, 'mark': mark, 'grade': grade}
             data['students'][self.student]['subjects'].append(subjects)
-
+            print(f"Updated data: {data}")
             # Write updated data
             self.db.write(data)
+            print("Data written to file.")
 
             subject_count = Backend.get_count(self)
             Backend.print_col(f"You are now enrolled in {subject_count} out of 4 subjects", "yellow")
@@ -191,8 +199,8 @@ class StuCourseSys():
 
     def __init__(self, email):
 
-        self.db = DataBase(email)
-        self.be = Backend(self.db)
+        self.db = DataBase()
+        self.be = Backend(email)
         self.contents = self.db.read()
         self.user_input = self.be.standard_user_input()
         self.correct_inputs = ['x', 'c', 'e', 'r', 's']
@@ -221,5 +229,5 @@ class StuCourseSys():
                 self.user_input = self.be.standard_user_input()
 
 if __name__ == "__main__":
-    system = StuCourseSys('alen.jones@university.com')
+    system = StuCourseSys('mark.paje@university.com')
     system.main()
