@@ -101,10 +101,8 @@ class Backend():
             return False
 
     def get_count(self):
-        if self.check_sub() == True:
-            return len(self.students['students'][self.student]['subject'])
-        else:
-            return 0
+        return len(self.students['students'].get(self.student, {}).get('subjects', []))
+
     
     @staticmethod
     def update_password():
@@ -184,10 +182,10 @@ class Backend():
 
             subjects = {'subject': subject_id, 'mark': mark, 'grade': grade}
             data['students'][self.student]['subjects'].append(subjects)
-            print(f"Updated data: {data}")
+            # print(f"Updated data: {data}")
             # Write updated data
             self.db.write(data)
-            print("Data written to file.")
+            # print("Data written to file.")
 
             subject_count = Backend.get_count(self)
             Backend.print_col(f"You are now enrolled in {subject_count} out of 4 subjects", "yellow")
@@ -228,6 +226,6 @@ class StuCourseSys():
                 self.be.print_col(f"Input {self.user_input} not a valid input. Try again...", "red") 
                 self.user_input = self.be.standard_user_input()
 
-if __name__ == "__main__":
-    system = StuCourseSys('mark.paje@university.com')
-    system.main()
+# if __name__ == "__main__":
+#     system = StuCourseSys(email)
+#     system.main()

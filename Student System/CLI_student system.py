@@ -1,5 +1,5 @@
 from student_controller import StudentController
-import cop_Student_Course_System_copy
+import Student_Course_System_copy
 import re
 
 def main():
@@ -23,8 +23,10 @@ def main():
                 success, message = controller.login_student(email, password)
                 if success:
                     print("\033[92mLogin successful!\033[0m")
-                    cop_Student_Course_System_copy.StuCourseSys(email) # Student enrollment system, have to amend to make sure the whole module works here
+                    course_sys = Student_Course_System_copy.StuCourseSys(email) 
+                    course_sys.main()
                 else:
+                    print(controller.load_students())
                     print("\033[91mStudent does not exist\033[0m")
 
         elif command == 'r':

@@ -1,5 +1,3 @@
 # 32555_Software_Fund
 
-Assessment work for Assignment Case Study (University Case Study)
-
-test123
+- Change the Student_Course_System_copy.py to be just the student system with a separate file for the Backend and Subject class
