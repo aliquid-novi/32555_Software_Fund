@@ -101,7 +101,7 @@ class UniversitySystem:
                     success, message = self.controller.login_student(email, password)
                     if success:
                         print("     \033[92mLogin successful!\033[0m")
-                        # student_course_menu()  # Potential future integration point for course management
+                        # student_course_menu()  # Future integration point for course management
                     else:
                         print("     \033[91m" + message + "\033[0m")
 
