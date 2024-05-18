@@ -4,7 +4,7 @@ import json
 import re
 import sys
 # Assuming your module is in the directory "C:/path/to/your/module"
-module_dir = r'32555_Software_Fund\Student System'
+module_dir = r'C:/Users/danie/32555_Software_Fund-1/Student System/Student_Course_System_copy.py'
 sys.path.append(module_dir)
 
 import Student_Course_System_copy as controller
