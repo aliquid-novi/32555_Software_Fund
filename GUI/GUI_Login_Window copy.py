@@ -21,6 +21,8 @@ class GUIUniApp:
         self.student_data = self.load_student_data()
         self.logged_in_student = None
 
+        self.db = controller.DataBase()
+        self.subjects = controller.SubjectClass()
         # GUI Login window
         tk.Label(self.root, text='Enter your login details', font=('Arial', 14), bg='#252934', fg='#FFFFFF').pack(pady=20)
         
@@ -46,7 +48,8 @@ class GUIUniApp:
     def login(self):
         email = self.email_entry.get().strip()
         password = self.password_entry.get()
-        
+        self.backend = controller.Backend(email)
+        self.email = email
         # Email not entered / password not entered
         if not email or not password:
             messagebox.showerror('Login Error', 'Email and password cannot be empty')
@@ -60,11 +63,6 @@ class GUIUniApp:
         if self.authenticate(email, password):
             self.logged_in_student = email
             self.open_enrollment_window()
-            #
-            db = controller.DataBase()
-            backend = controller.Backend(email)
-            subjects = controller.SubjectClass()
-            # 
         else:
             messagebox.showerror('Login Error', 'Invalid credentials')
 
@@ -81,9 +79,17 @@ class GUIUniApp:
         tk.Label(self.enrollment_window, text='Select Subject to Enroll:', font=('Arial', 14), bg='#252934', fg='#FFFFFF').pack(pady=20)
         
         # Subjects list
+        self.subjects_list = [] # init list
+        for i in range(10):
+            self.subjects_list.append(self.subjects.Gen_SubjectID())
         
-        self.subjects_list = ['Mathematics', 'Science', 'History', 'English', 'Biology', 'Chemistry', 'Physics', 'Art']
-        self.enrolled_subjects = []
+        self.enrolled_subjects = [] # change to current subjects already
+        contents = self.db.read()
+        print(contents)
+        
+        for i in range(len(contents['students'][self.email]['subjects'])):
+            self.enrolled_subjects.append(contents['students'][self.email]['subjects'][i]['subject'])
+
         for subject in self.subjects_list:
             button = tk.Button(self.enrollment_window, text=f'Enroll in {subject}', command=lambda subj=subject: self.enroll_subject(subj), bg='#4A5664', fg='#FFFFFF', relief='flat')
             button.pack(pady=5)
@@ -94,6 +100,8 @@ class GUIUniApp:
         self.root.withdraw()
 
     def enroll_subject(self, subject):
+        # Read current amount of subjects already enrolled
+
         if len(self.enrolled_subjects) >= 4:
             messagebox.showerror('Enrollment Error', 'Cannot enroll in more than 4 subjects')
             return
