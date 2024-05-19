@@ -105,22 +105,38 @@ class Backend():
 
     
     # @staticmethod
+    # def update_password(self):
+    #     new_password = input("New Password: ")
+    #     confirm_password = input("Confirm Password: ")
+
+    #     while confirm_password != new_password:
+    #         Backend.print_col("Password does not match - try again", "red")
+    #         confirm_password = input("Confirm Password: ")
+
+    #     # Update the password in the loaded student data
+    #     if self.student in self.students['students']:
+    #         self.students['students'][self.student]['password'] = confirm_password
+    #         self.db.write(self.students)  # Write the updated data back to the file
+    #         # Backend.print_col("Password updated successfully.", "blue")
+    #         self.students = self.db.read()
+    #     else:
+    #         Backend.print_col("Student record not found.", "red")
+
     def update_password(self):
-        new_password = input("New Password: ")
-        confirm_password = input("Confirm Password: ")
-
+        # print("Updating Password")
+        new_password = input("New Password:")
+        confirm_password = input("Confirm Password:")
+        
         while confirm_password != new_password:
-            Backend.print_col("Password does not match - try again", "red")
-            confirm_password = input("Confirm Password: ")
-
-        # Update the password in the loaded student data
+            print("Password does not match - try again")
+            confirm_password = input("Confirm Password:")
+        
+        # Assuming student data is stored in a 'students' dict
         if self.student in self.students['students']:
             self.students['students'][self.student]['password'] = confirm_password
-            self.db.write(self.students)  # Write the updated data back to the file
-            # Backend.print_col("Password updated successfully.", "blue")
-            self.students = self.db.read()
-        else:
-            Backend.print_col("Student record not found.", "red")
+            self.db.write(self.students)
+            print("Password updated successfully.")
+            self.students = self.db.read()  # Reload data to ensure consistency
 
     
     def show(self):

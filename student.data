@@ -83,7 +83,7 @@
       "first_name": "hello",
       "last_name": "world",
       "email": "hello.world@university.com",
-      "password": "Helloworld123",
+      "password": "helloWorld321",
       "student_id": "849445",
       "subjects": [
         {
@@ -97,11 +97,19 @@
           "grade": "P"
         }
       ]
+    },
+    "mark.paje@university.com": {
+      "first_name": "mark",
+      "last_name": "paje",
+      "email": "mark.paje@university.com",
+      "password": "HelloWorld123",
+      "student_id": "247089"
     }
   },
   "used_ids": [
     849445,
     284263,
+    247089,
     251922,
     892758,
     208349

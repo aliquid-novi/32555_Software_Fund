@@ -1,16 +1,14 @@
 import json
 import random
-from student import Student
-
-import json
-import random
 from student import Student 
+import database as db
 
 class StudentController:
     def __init__(self):
         self.students = {}
         self.used_ids = set()
         self.load_students()
+        self.db = db
 
     def load_students(self):
         try:
@@ -47,8 +45,17 @@ class StudentController:
         self.save_students()
         return True, f"Registration successful. Your student ID is {student_id}."
 
+    # def login_student(self, email, password):
+    #     student = self.students.get(email)
+    #     if student and student['password'] == password:
+    #         return True, "Login successful."
+    #     return False, "Invalid email or password."
+
     def login_student(self, email, password):
+        # Reload the students each time before checking login to ensure the data is fresh
+        self.load_students()
         student = self.students.get(email)
+        print(student)
         if student and student['password'] == password:
             return True, "Login successful."
         return False, "Invalid email or password."
