@@ -49,7 +49,6 @@ class StudentController:
         # Reload the students each time before checking login to ensure the data is fresh
         self.load_students()
         student = self.students.get(email)
-    
         if student and student['password'] == password:
             return True, "Login successful."
         return False, "Invalid email or password."

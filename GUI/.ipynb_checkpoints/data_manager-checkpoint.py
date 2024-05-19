@@ -9,7 +9,7 @@ class DataManager:
     def load_data(self):
         if not os.path.exists(self.filepath):
             print(f"{self.filepath} not found, creating new file.")
-            self.save_data({})
+            self.save_data({'students': {}, 'used_ids': [], 'results': {'PASS': [], 'FAIL': []}})
             return {}
         with open(self.filepath, 'r') as file:
             try:
@@ -29,4 +29,16 @@ class DataManager:
 
     def update_student_data(self, student_data):
         self.data['students'] = student_data
+        self.save_data(self.data)
+        
+    def update_results(self, pass_results, fail_results):
+        # Ensure the 'results' key exists in the data dictionary
+        if 'results' not in self.data:
+            self.data['results'] = {'PASS': [], 'FAIL': []}  # Initialize both PASS and FAIL lists
+
+        # Now safely assign the results
+        self.data['results']['PASS'] = pass_results
+        self.data['results']['FAIL'] = fail_results
+
+        # Save the updated data back to the file
         self.save_data(self.data)

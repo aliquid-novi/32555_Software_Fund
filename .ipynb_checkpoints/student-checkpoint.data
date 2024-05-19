@@ -8,11 +8,6 @@
       "student_id": "208349",
       "subjects": [
         {
-          "subject": "085",
-          "mark": 32,
-          "grade": "F"
-        },
-        {
           "subject": "084",
           "mark": 100,
           "grade": "HD"

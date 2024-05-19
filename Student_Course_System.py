@@ -2,6 +2,7 @@
 import random
 import os
 import json
+import re
 
 class SubjectClass():
 
@@ -27,19 +28,37 @@ class SubjectClass():
         
         return mark, grade
     
+    @staticmethod    
+    def Classify_Results(mark):
+        if mark <= 49:
+            grade = 'F'
+        elif mark >= 50 and mark <= 64:
+            grade = 'P'
+        elif mark >= 65 and mark <= 74:
+            grade = 'C'
+        elif mark >= 75 and mark <= 84:
+            grade = 'D'
+        elif mark >= 85:
+            grade = 'HD'
+            
+        return grade
+    
 class DataBase:
     def __init__(self, filename='student.data'):
         self.filename = filename
-        self.check_and_create_file()
+        self.ensure_file_ready(silent=True)  # Call with a silent flag to avoid repetitive prints
 
-    def check_and_create_file(self):
-        print(f"Checking if '{self.filename}' exists...")
+    def ensure_file_ready(self, silent=False):
         if not os.path.exists(self.filename):
-            with open(self.filename, 'w') as file:
-                file.write("")  # Create an empty file
+            self.initialize_file()
+        elif not silent:
+            print(f"File '{self.filename}' ready.")
+
+    def initialize_file(self):
+        with open(self.filename, 'w') as file:
+            file.write(json.dumps({"students": {}, "used_ids": []}))
             print(f"File '{self.filename}' created.")
-        else:
-            print(f"File '{self.filename}' exists.")
+
 
     def write(self, data):
         try:
@@ -104,21 +123,27 @@ class Backend():
         return len(self.students['students'].get(self.student, {}).get('subjects', []))
 
     def update_password(self):
-        # print("Updating Password")
-        new_password = input("New Password:")
-        confirm_password = input("Confirm Password:")
-        
-        while confirm_password != new_password:
-            print("Password does not match - try again")
-            confirm_password = input("Confirm Password:")
-        
-        # Assuming student data is stored in a 'students' dict
-        if self.student in self.students['students']:
-            self.students['students'][self.student]['password'] = confirm_password
-            self.db.write(self.students)
-            print("Password updated successfully.")
-            self.students = self.db.read()  # Reload data to ensure consistency
+        password_pattern = r'^[A-Z][a-zA-Z]{5,}\d{3,}$'
 
+        while True:
+            new_password = input("New Password: ")
+            # Check if the new password meets the format
+            if not re.match(password_pattern, new_password):
+                print("Password must start with an uppercase letter, followed by at least 5 more letters, and end with at least 3 digits.")
+                continue
+
+            confirm_password = input("Confirm Password: ")
+            if confirm_password != new_password:
+                print("Passwords do not match - try again.")
+                continue
+            
+            # Assuming student data is stored in a 'students' dict
+            if self.student in self.students['students']:
+                self.students['students'][self.student]['password'] = confirm_password
+                self.db.write(self.students)
+                print("Password updated successfully.")
+                self.students = self.db.read()  # Reload data to ensure consistency
+            break
     
     def show(self):
         data = self.students

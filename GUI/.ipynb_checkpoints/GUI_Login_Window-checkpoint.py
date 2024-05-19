@@ -114,34 +114,33 @@ class GUIUniApp:
         self.save_data()
 
     def enroll_subject(self, subject):
+
         all_students_data = self.db.read()
         student_data = all_students_data['students'][self.email]
-        
-        self.enrolled_subjects.append(subject)
-        # Initialize the subjects list if it doesn't exist
+
         if 'subjects' not in student_data:
             student_data['subjects'] = []
 
-        # Prevent enrolling in more than 4 subjects
-        if len(student_data['subjects']) >= 4:
+        # Read current amount of subjects already enrolled
+        if len(self.enrolled_subjects) >= 4:
             messagebox.showerror('Enrollment Error', 'Cannot enroll in more than 4 subjects')
             return
-
-        # Check if the subject is already enrolled
-        if any(s.get('subject') == subject for s in student_data['subjects']):
+        if subject in self.enrolled_subjects:
             messagebox.showinfo('Enrollment Info', 'Already enrolled in this subject')
             return
 
-        # Generate results for the new subject
+        student_data['subjects'].append(subject)
+        all_students_data[self.email] = student_data
+
+        self.enrolled_subjects.append(subject)
+
+        student_data['subjects'].append(subject)
         mark, grade = self.subjects.Gen_Results()
 
-        # Append the new subject with its details
         student_data['subjects'].append({'subject': subject, 'mark': mark, 'grade': grade})
-
-        # Save the updated data back to the file
         self.db.write(all_students_data)
+        
         messagebox.showinfo('Enrollment Success', f'Successfully enrolled in {subject}')
-
 
     def manage_enrollment(self):
         # Window to manage enrolled subjects
@@ -158,6 +157,13 @@ class GUIUniApp:
             tk.Label(frame, text=subject, bg='#333B47', fg='#FFFFFF').pack(side='left')
             remove_button = tk.Button(frame, text='Remove', command=lambda subj=subject: self.remove_subject(subj), bg='#FF5555', fg='#FFFFFF', relief='flat')
             remove_button.pack(side='right')
+
+    def remove_subject(self, subject):
+        if subject in self.enrolled_subjects:
+            self.enrolled_subjects.remove(subject)
+            messagebox.showinfo('Update', f'{subject} has been removed from your enrollment list')
+            self.manage_window.destroy()  # Refresh the manage enrollment window
+            self.manage_enrollment()  # Reopen to update the list
 
     def remove_subject(self, subject):
         # Load the full data
