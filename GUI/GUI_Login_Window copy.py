@@ -4,7 +4,7 @@ import json
 import re
 import sys
 from data_manager import DataManager
-# # Assuming your module is in the directory "C:/path/to/your/module"
+
 # # module_dir = r'C:/Users/danie/32555_Software_Fund-1/Student System/Student_Course_System_copy.py' # Anna's relative path?
 
 import sys
@@ -30,6 +30,7 @@ class GUIUniApp:
         self.student_data = self.data_controller.get_student_data()
         self.logged_in_student = None
         self.subjects = controller.SubjectClass()
+        self.db = controller.DataBase(self.filepath)
 
         # GUI Login window
         tk.Label(self.root, text='Enter your login details', font=('Arial', 14), bg='#252934', fg='#FFFFFF').pack(pady=20)
@@ -98,9 +99,21 @@ class GUIUniApp:
 
         self.root.withdraw()
 
-    def enroll_subject(self, subject):
-        # Read current amount of subjects already enrolled
+    def save_data(self, data=None):
+        if data is not None:
+            self.data = data
+        with open(self.filepath, 'w') as file:
+            json.dump(self.data, file, indent=2)
+            print("Data saved to file.")
+    
+    def update_student_data(self, student_data):
+        self.data['students'] = student_data
+        self.save_data()
 
+    def enroll_subject(self, subject):
+        students = self.data_controller.get_student_data()
+        student = self.email
+        # Read current amount of subjects already enrolled
         if len(self.enrolled_subjects) >= 4:
             messagebox.showerror('Enrollment Error', 'Cannot enroll in more than 4 subjects')
             return
@@ -108,6 +121,12 @@ class GUIUniApp:
             messagebox.showinfo('Enrollment Info', 'Already enrolled in this subject')
             return
         self.enrolled_subjects.append(subject)
+        mark, grade = self.subjects.Gen_Results()
+        # print(students)
+        students[self.email]['subjects'].append({'subject': subject, 'mark': mark, 'grade': grade})
+
+        self.db.write(students)
+
         messagebox.showinfo('Enrollment Success', f'Successfully enrolled in {subject}')
 
     def manage_enrollment(self):

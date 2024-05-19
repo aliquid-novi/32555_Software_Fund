@@ -33,15 +33,8 @@
       "first_name": "first",
       "last_name": "name",
       "email": "first.name@university.com",
-      "password": "helloWorld321",
-      "student_id": "892758",
-      "subjects": [
-        {
-          "subject": "639",
-          "mark": 68,
-          "grade": "C"
-        }
-      ]
+      "password": "Helloworld123",
+      "student_id": "892758"
     },
     "newname.lastnmae@university.com": {
       "first_name": "newname",
@@ -55,61 +48,19 @@
       "last_name": "smith",
       "email": "bobby.smith@university.com",
       "password": "Helloworld123",
-      "student_id": "284263",
-      "subjects": [
-        {
-          "subject": "795",
-          "mark": 38,
-          "grade": "F"
-        },
-        {
-          "subject": "621",
-          "mark": 78,
-          "grade": "D"
-        },
-        {
-          "subject": "056",
-          "mark": 43,
-          "grade": "F"
-        },
-        {
-          "subject": "186",
-          "mark": 34,
-          "grade": "F"
-        }
-      ]
+      "student_id": "284263"
     },
     "hello.world@university.com": {
       "first_name": "hello",
       "last_name": "world",
       "email": "hello.world@university.com",
-      "password": "helloWorld321",
-      "student_id": "849445",
-      "subjects": [
-        {
-          "subject": "395",
-          "mark": 40,
-          "grade": "F"
-        },
-        {
-          "subject": "113",
-          "mark": 55,
-          "grade": "P"
-        }
-      ]
-    },
-    "mark.paje@university.com": {
-      "first_name": "mark",
-      "last_name": "paje",
-      "email": "mark.paje@university.com",
-      "password": "HelloWorld123",
-      "student_id": "247089"
+      "password": "Helloworld123",
+      "student_id": "849445"
     }
   },
   "used_ids": [
     849445,
     284263,
-    247089,
     251922,
     892758,
     208349

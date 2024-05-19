@@ -48,48 +48,14 @@
       "last_name": "smith",
       "email": "bobby.smith@university.com",
       "password": "Helloworld123",
-      "student_id": "284263",
-      "subjects": [
-        {
-          "subject": "795",
-          "mark": 38,
-          "grade": "F"
-        },
-        {
-          "subject": "621",
-          "mark": 78,
-          "grade": "D"
-        },
-        {
-          "subject": "056",
-          "mark": 43,
-          "grade": "F"
-        },
-        {
-          "subject": "186",
-          "mark": 34,
-          "grade": "F"
-        }
-      ]
+      "student_id": "284263"
     },
     "hello.world@university.com": {
       "first_name": "hello",
       "last_name": "world",
       "email": "hello.world@university.com",
       "password": "Helloworld123",
-      "student_id": "849445",
-      "subjects": [
-        {
-          "subject": "395",
-          "mark": 40,
-          "grade": "F"
-        },
-        {
-          "subject": "113",
-          "mark": 55,
-          "grade": "P"
-        }
-      ]
+      "student_id": "849445"
     }
   },
   "used_ids": [

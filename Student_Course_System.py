@@ -103,25 +103,6 @@ class Backend():
     def get_count(self):
         return len(self.students['students'].get(self.student, {}).get('subjects', []))
 
-    
-    # @staticmethod
-    # def update_password(self):
-    #     new_password = input("New Password: ")
-    #     confirm_password = input("Confirm Password: ")
-
-    #     while confirm_password != new_password:
-    #         Backend.print_col("Password does not match - try again", "red")
-    #         confirm_password = input("Confirm Password: ")
-
-    #     # Update the password in the loaded student data
-    #     if self.student in self.students['students']:
-    #         self.students['students'][self.student]['password'] = confirm_password
-    #         self.db.write(self.students)  # Write the updated data back to the file
-    #         # Backend.print_col("Password updated successfully.", "blue")
-    #         self.students = self.db.read()
-    #     else:
-    #         Backend.print_col("Student record not found.", "red")
-
     def update_password(self):
         # print("Updating Password")
         new_password = input("New Password:")
