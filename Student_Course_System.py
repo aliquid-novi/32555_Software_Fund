@@ -22,14 +22,14 @@ class SubjectClass():
             grade = 'C'
         elif mark >= 75 and mark <= 84:
             grade = 'D'
-        elif mark > 85:
+        elif mark >= 85:
             grade = 'HD'
         
         return mark, grade
     
 class DataBase:
-    def __init__(self, filename="student.data"):
-        self.filename = filename 
+    def __init__(self, filename='student.data'):
+        self.filename = filename
         self.check_and_create_file()
 
     def check_and_create_file(self):
@@ -69,10 +69,11 @@ class DataBase:
             return {"students": {}, "used_ids": []}
 
 class Backend():
+    "Needs 'db' DataBase object to perform get_count function"
 
-    def __init__(self, email, filename = 'students.data'):
+    def __init__(self, email, filename = 'student.data'):
         self.filename = filename
-        self.db = DataBase()
+        self.db = DataBase(filename)
         self.students = self.db.read()
         self.student = email
 
@@ -103,14 +104,24 @@ class Backend():
         return len(self.students['students'].get(self.student, {}).get('subjects', []))
 
     
-    @staticmethod
-    def update_password():
-        new_password = input("New Password:")
-        confirm_password = input("Confirm Password:")
-        
+    # @staticmethod
+    def update_password(self):
+        new_password = input("New Password: ")
+        confirm_password = input("Confirm Password: ")
+
         while confirm_password != new_password:
-            Backend.print_col("Password does not match - try again", "red")   
-            confirm_password = input("Confirm Password:")
+            Backend.print_col("Password does not match - try again", "red")
+            confirm_password = input("Confirm Password: ")
+
+        # Update the password in the loaded student data
+        if self.student in self.students['students']:
+            self.students['students'][self.student]['password'] = confirm_password
+            self.db.write(self.students)  # Write the updated data back to the file
+            # Backend.print_col("Password updated successfully.", "blue")
+            self.students = self.db.read()
+        else:
+            Backend.print_col("Student record not found.", "red")
+
     
     def show(self):
         data = self.students
@@ -198,7 +209,8 @@ class StuCourseSys():
 
         self.db = DataBase()
         self.be = Backend(email)
-        self.contents = self.db.read()
+        # self.contents = self.db.read()
+        self.students = self.db.read()
         self.user_input = self.be.standard_user_input()
         self.correct_inputs = ['x', 'c', 'e', 'r', 's']
 

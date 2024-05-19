@@ -69,10 +69,9 @@ class DataBase:
             return {"students": {}, "used_ids": []}
 
 class Backend():
-    "Needs 'db' DataBase object to perform get_count function"
 
-    def __init__(self, email):
-        self.filename = 'student.data'
+    def __init__(self, email, filename = 'students.data'):
+        self.filename = filename
         self.db = DataBase()
         self.students = self.db.read()
         self.student = email

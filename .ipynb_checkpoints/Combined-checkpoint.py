@@ -10,7 +10,7 @@ import Student_Course_System
 # DATABASE
 
 class DataBase:
-    def __init__(self, filename="student.data"):
+    def __init__(self, filename="students.data"):
         self.filename = filename
         self.check_and_create_file()
 
@@ -51,8 +51,8 @@ class Student:
         self.student_id = student_id
 
 
-# UNIVERSITY SYSTEM + STUDENT L/R/X MENU + COURSE ENROLLMENT- DONE
-## add ADMIN SYSTEM 
+# UNIVERSITY SYSTEM + STUDENT L/R/X MENU - DONE
+## add ADMIN SYSTEM + COURSE ENROLLMENT
 class UniversitySystem:
     def __init__(self):
         self.controller = StudentController()

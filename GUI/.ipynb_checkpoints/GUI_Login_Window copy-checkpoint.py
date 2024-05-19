@@ -3,9 +3,12 @@ from tkinter import messagebox
 import json
 import re
 import sys
-from data_manager import DataManager
 # # Assuming your module is in the directory "C:/path/to/your/module"
 # # module_dir = r'C:/Users/danie/32555_Software_Fund-1/Student System/Student_Course_System_copy.py' # Anna's relative path?
+# module_dir = r'32555_Software_Fund\Student_Course_System.py' # Marks relative path 
+# sys.path.append(module_dir)
+
+# import Student_Course_System as controller
 
 import sys
 import os
@@ -23,14 +26,21 @@ class GUIUniApp:
         self.root.geometry('600x600')
         self.root.title('University Application - Student Login')
         self.root.configure(bg='#252934')  # Dark theme
-        # abs file path. maybe change to a common one later?
-        self.filepath = r'C:\Users\markp\OneDrive\Documents\GitHub\Uni Work\32555 - Fund._of_Software_Dev\32555_Software_Fund\student.data'
-        self.data_controller = DataManager(self.filepath)
-        # Load student data
-        self.student_data = self.data_controller.get_student_data()
-        self.logged_in_student = None
-        self.subjects = controller.SubjectClass()
+        # file path. maybe change to a common one later?
+        self.filename = r'C:\Users\markp\OneDrive\Documents\GitHub\Uni Work\32555 - Fund._of_Software_Dev\32555_Software_Fund\student.data'
+        # Correct path to student.data directly in the 32555_Software_Fund folder
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.filename = os.path.join(base_dir, 'student.data')
 
+
+        # Print the path to check it
+        print(f"Expected path to student.data: {self.filename}")
+        # Load student data
+        self.student_data = self.load_student_data()
+        self.logged_in_student = None
+
+        self.db = controller.DataBase()
+        self.subjects = controller.SubjectClass()
         # GUI Login window
         tk.Label(self.root, text='Enter your login details', font=('Arial', 14), bg='#252934', fg='#FFFFFF').pack(pady=20)
         
@@ -45,10 +55,18 @@ class GUIUniApp:
         login_button = tk.Button(self.root, text='Login', command=self.login, bg='#4A5664', fg='#FFFFFF', relief='flat')
         login_button.pack(pady=20)
 
+    def load_student_data(self):
+        try:
+            with open(self.filename, 'r') as file:
+                return json.load(file)
+        except Exception as e:
+            messagebox.showerror('File Error', 'Failed to read student data: ' + str(e))
+            return {}
+
     def login(self):
         email = self.email_entry.get().strip()
         password = self.password_entry.get()
-        self.backend = controller.Backend(email, self.filepath)
+        self.backend = controller.Backend(email)
         self.email = email
         # Email not entered / password not entered
         if not email or not password:
@@ -67,7 +85,7 @@ class GUIUniApp:
             messagebox.showerror('Login Error', 'Invalid credentials')
 
     def authenticate(self, email, password):
-        student = self.student_data.get(email) 
+        student = self.student_data.get('students', {}).get(email)
         return student and student['password'] == password
 
     def open_enrollment_window(self):
@@ -84,10 +102,11 @@ class GUIUniApp:
             self.subjects_list.append(self.subjects.Gen_SubjectID())
         
         self.enrolled_subjects = [] # change to current subjects already
-        contents = self.data_controller.get_student_data()
+        contents = self.db.read()
+        print(contents)
 
-        for i in range(len(contents[self.email]['subjects'])):
-            self.enrolled_subjects.append(contents[self.email]['subjects'][i]['subject'])
+        for i in range(len(contents['students'][self.email]['subjects'])):
+            self.enrolled_subjects.append(contents['students'][self.email]['subjects'][i]['subject'])
 
         for subject in self.subjects_list:
             button = tk.Button(self.enrollment_window, text=f'Enroll in {subject}', command=lambda subj=subject: self.enroll_subject(subj), bg='#4A5664', fg='#FFFFFF', relief='flat')
