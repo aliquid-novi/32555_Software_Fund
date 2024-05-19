@@ -115,14 +115,13 @@ class GUIUniApp:
 
     def enroll_subject(self, subject):
 
-        
-        
         students = self.db.read()
         # Retrieve the entire student data
         all_students_data = self.db.read()
+        # gets specific student
         student_data = all_students_data['students'][self.email]
 
-        # Append the new subject to the student's list of subjects
+    
         if 'subjects' not in student_data:
             student_data['subjects'] = []
 
@@ -139,13 +138,13 @@ class GUIUniApp:
         all_students_data[self.email] = student_data
         mark, grade = self.subjects.Gen_Results()
         
-        # issue with subjects, don't tihnk the if 'subjects' loop above is working as intended
+        # issue with subjects not being a key, don't tihnk the if 'subjects' loop above is working as intended
         students['students'][self.email]['subjects'].append({'subject': subject, 'mark': mark, 'grade': grade})
 
         self.db.write(students)
         # main issue was that after writing into the file, it would modify the entire file 
         # structure and remove 'students' key which other functions depend on.
-
+        
         messagebox.showinfo('Enrollment Success', f'Successfully enrolled in {subject}')
 
     def manage_enrollment(self):
