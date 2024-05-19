@@ -85,10 +85,13 @@ class GUIUniApp:
             self.subjects_list.append(self.subjects.Gen_SubjectID())
         
         self.enrolled_subjects = [] # change to current subjects already
-        contents = self.data_controller.get_student_data()
+        students = self.data_controller.get_student_data()
 
-        for i in range(len(contents[self.email]['subjects'])):
-            self.enrolled_subjects.append(contents[self.email]['subjects'][i]['subject'])
+        if 'subjects' not in students[self.email]:
+            students[self.email]['subjects'] = []
+        
+        for i in range(len(students[self.email]['subjects'])):
+            self.enrolled_subjects.append(students[self.email]['subjects'][i]['subject'])
 
         for subject in self.subjects_list:
             button = tk.Button(self.enrollment_window, text=f'Enroll in {subject}', command=lambda subj=subject: self.enroll_subject(subj), bg='#4A5664', fg='#FFFFFF', relief='flat')
@@ -111,8 +114,18 @@ class GUIUniApp:
         self.save_data()
 
     def enroll_subject(self, subject):
-        students = self.data_controller.get_student_data()
-        student = self.email
+
+        
+        
+        students = self.db.read()
+        # Retrieve the entire student data
+        all_students_data = self.db.read()
+        student_data = all_students_data['students'][self.email]
+
+        # Append the new subject to the student's list of subjects
+        if 'subjects' not in student_data:
+            student_data['subjects'] = []
+
         # Read current amount of subjects already enrolled
         if len(self.enrolled_subjects) >= 4:
             messagebox.showerror('Enrollment Error', 'Cannot enroll in more than 4 subjects')
@@ -120,12 +133,18 @@ class GUIUniApp:
         if subject in self.enrolled_subjects:
             messagebox.showinfo('Enrollment Info', 'Already enrolled in this subject')
             return
+
         self.enrolled_subjects.append(subject)
+        student_data['subjects'].append(subject)
+        all_students_data[self.email] = student_data
         mark, grade = self.subjects.Gen_Results()
-        # print(students)
-        students[self.email]['subjects'].append({'subject': subject, 'mark': mark, 'grade': grade})
+        
+        # issue with subjects, don't tihnk the if 'subjects' loop above is working as intended
+        students['students'][self.email]['subjects'].append({'subject': subject, 'mark': mark, 'grade': grade})
 
         self.db.write(students)
+        # main issue was that after writing into the file, it would modify the entire file 
+        # structure and remove 'students' key which other functions depend on.
 
         messagebox.showinfo('Enrollment Success', f'Successfully enrolled in {subject}')
 
