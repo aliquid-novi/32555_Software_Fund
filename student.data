@@ -8,22 +8,19 @@
       "student_id": "208349",
       "subjects": [
         {
-          "subject": "085",
-          "mark": 32,
-          "grade": "F"
-        },
-        {
-          "subject": "084",
-          "mark": 100,
-          "grade": "HD"
-        },
-        {
           "subject": "723",
           "mark": 77,
           "grade": "D"
         },
         {
           "subject": "216",
+          "mark": 25,
+          "grade": "F"
+        },
+        "105",
+        "105",
+        {
+          "subject": "105",
           "mark": 25,
           "grade": "F"
         }
@@ -34,21 +31,69 @@
       "last_name": "name",
       "email": "first.name@university.com",
       "password": "Helloworld123",
-      "student_id": "892758"
+      "student_id": "892758",
+      "subjects": [
+        "321",
+        "321",
+        {
+          "subject": "321",
+          "mark": 60,
+          "grade": "P"
+        }
+      ]
     },
     "newname.lastnmae@university.com": {
       "first_name": "newname",
       "last_name": "lastnmae",
       "email": "newname.lastnmae@university.com",
       "password": "Helloworld123",
-      "student_id": "251922"
+      "student_id": "251922",
+      "subjects": [
+        "714",
+        "714",
+        {
+          "subject": "714",
+          "mark": 79,
+          "grade": "D"
+        },
+        "100",
+        "100",
+        {
+          "subject": "100",
+          "mark": 89,
+          "grade": "HD"
+        },
+        "765",
+        "765",
+        {
+          "subject": "765",
+          "mark": 65,
+          "grade": "C"
+        }
+      ]
     },
     "bobby.smith@university.com": {
       "first_name": "bobby",
       "last_name": "smith",
       "email": "bobby.smith@university.com",
       "password": "Helloworld123",
-      "student_id": "284263"
+      "student_id": "284263",
+      "subjects": [
+        "450",
+        "450",
+        {
+          "subject": "450",
+          "mark": 59,
+          "grade": "P"
+        },
+        "154",
+        "154",
+        {
+          "subject": "154",
+          "mark": 84,
+          "grade": "D"
+        }
+      ]
     },
     "hello.world@university.com": {
       "first_name": "hello",
@@ -64,5 +109,105 @@
     251922,
     892758,
     208349
-  ]
+  ],
+  "first.name@university.com": {
+    "first_name": "first",
+    "last_name": "name",
+    "email": "first.name@university.com",
+    "password": "Helloworld123",
+    "student_id": "892758",
+    "subjects": [
+      "321",
+      "321",
+      {
+        "subject": "321",
+        "mark": 60,
+        "grade": "P"
+      }
+    ]
+  },
+  "newname.lastnmae@university.com": {
+    "first_name": "newname",
+    "last_name": "lastnmae",
+    "email": "newname.lastnmae@university.com",
+    "password": "Helloworld123",
+    "student_id": "251922",
+    "subjects": [
+      "714",
+      "714",
+      {
+        "subject": "714",
+        "mark": 79,
+        "grade": "D"
+      },
+      "100",
+      "100",
+      {
+        "subject": "100",
+        "mark": 89,
+        "grade": "HD"
+      },
+      "765",
+      "765",
+      {
+        "subject": "765",
+        "mark": 65,
+        "grade": "C"
+      }
+    ]
+  },
+  "bobby.smith@university.com": {
+    "first_name": "bobby",
+    "last_name": "smith",
+    "email": "bobby.smith@university.com",
+    "password": "Helloworld123",
+    "student_id": "284263",
+    "subjects": [
+      "450",
+      "450",
+      {
+        "subject": "450",
+        "mark": 59,
+        "grade": "P"
+      },
+      "154",
+      "154",
+      {
+        "subject": "154",
+        "mark": 84,
+        "grade": "D"
+      }
+    ]
+  },
+  "anamarija.bojceska@university.com": {
+    "first_name": "anamarija",
+    "last_name": "bojceska",
+    "email": "anamarija.bojceska@university.com",
+    "password": "Helloworld123",
+    "student_id": "208349",
+    "subjects": [
+      {
+        "subject": "084",
+        "mark": 100,
+        "grade": "HD"
+      },
+      {
+        "subject": "723",
+        "mark": 77,
+        "grade": "D"
+      },
+      {
+        "subject": "216",
+        "mark": 25,
+        "grade": "F"
+      },
+      "105",
+      "105",
+      {
+        "subject": "105",
+        "mark": 25,
+        "grade": "F"
+      }
+    ]
+  }
 }

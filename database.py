@@ -2,7 +2,7 @@ import os
 import json
 
 class DataBase:
-    def __init__(self, filename="students.data"):
+    def __init__(self, filename="student.data"):
         self.filename = filename
         self.check_and_create_file()
 

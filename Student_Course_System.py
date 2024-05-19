@@ -212,27 +212,39 @@ class StuCourseSys():
         self.correct_inputs = ['x', 'c', 'e', 'r', 's']
 
     def main(self):
+        try:
+            while self.user_input != 'x':
+                try:
+                    if self.user_input == 'c':  # Changing Subject
+                        self.be.print_col("Updating Password", "yellow")
+                        self.be.update_password()
+                        self.user_input = self.be.standard_user_input()
+                        
+                    elif self.user_input == 'e':  # Enrollment
+                        self.user_input = self.be.enrollment()
+                        
+                    elif self.user_input == 'r':  # Removing Subject
+                        self.be.removal()
+                        self.user_input = self.be.standard_user_input()
+                        
+                    elif self.user_input == 's':  # Showing subjects
+                        self.user_input = self.be.show()
 
-        while self.user_input != 'x':
-            
-            if self.user_input == 'c': # Changing Subject
-                self.be.print_col("Updating Password", "yellow")
-                self.be.update_password()
-                self.user_input = self.be.standard_user_input()
-                
-            elif self.user_input == 'e': # Enrollment 
-                self.user_input = self.be.enrollment()
-                    
-            elif self.user_input == 'r':  # Removing Subject
-                self.be.removal()
-                self.user_input = self.be.standard_user_input()
-                    
-            elif self.user_input == 's': # Showing subjects
-                self.user_input = self.be.show()
+                    elif self.user_input not in self.correct_inputs:  # Error Handling
+                        self.be.print_col(f"Input {self.user_input} not a valid input. Try again...", "red")
+                        self.user_input = self.be.standard_user_input()
 
-            elif self.user_input not in self.correct_inputs: # Error Handling
-                self.be.print_col(f"Input {self.user_input} not a valid input. Try again...", "red") 
-                self.user_input = self.be.standard_user_input()
+                except Exception as e:
+                    print(f"An error occurred during operation: {str(e)}")
+                    # Optionally offer the user to retry the action or return to the main menu
+                    self.user_input = self.be.standard_user_input()
+
+        except KeyboardInterrupt:
+            print("\nOperation canceled by user.")
+        except Exception as e:
+            print(f"An unexpected error occurred: {str(e)}")
+        finally:
+            print("Exiting the student course system...")
 
 # if __name__ == "__main__":
 #     system = StuCourseSys(email)

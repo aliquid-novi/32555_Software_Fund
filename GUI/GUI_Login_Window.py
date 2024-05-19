@@ -2,17 +2,35 @@ import tkinter as tk
 from tkinter import messagebox
 import json
 import re
+import sys
+from data_manager import DataManager
+
+# # module_dir = r'C:/Users/danie/32555_Software_Fund-1/Student System/Student_Course_System_copy.py' # Anna's relative path?
+
+import sys
+import os
+
+# Navigate up one directory from the current file's directory to access the 32555_Software_Fund folder
+module_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',))
+sys.path.append(module_dir)
+
+import Student_Course_System as controller
 
 class GUIUniApp:
+
     def __init__(self, root):
         self.root = root
         self.root.geometry('600x600')
         self.root.title('University Application - Student Login')
         self.root.configure(bg='#252934')  # Dark theme
-        
+        # abs file path. maybe change to a common one later?
+        self.filepath = r'C:\Users\markp\OneDrive\Documents\GitHub\Uni Work\32555 - Fund._of_Software_Dev\32555_Software_Fund\student.data'
+        self.data_controller = DataManager(self.filepath)
         # Load student data
-        self.student_data = self.load_student_data()
+        self.student_data = self.data_controller.get_student_data()
         self.logged_in_student = None
+        self.subjects = controller.SubjectClass()
+        self.db = controller.DataBase(self.filepath)
 
         # GUI Login window
         tk.Label(self.root, text='Enter your login details', font=('Arial', 14), bg='#252934', fg='#FFFFFF').pack(pady=20)
@@ -28,18 +46,11 @@ class GUIUniApp:
         login_button = tk.Button(self.root, text='Login', command=self.login, bg='#4A5664', fg='#FFFFFF', relief='flat')
         login_button.pack(pady=20)
 
-    def load_student_data(self):
-        try:
-            with open('C:/Users/danie/32555_Software_Fund/Student System/student.data', 'r') as file:
-                return json.load(file)
-        except Exception as e:
-            messagebox.showerror('File Error', 'Failed to read student data: ' + str(e))
-            return {}
-
     def login(self):
         email = self.email_entry.get().strip()
         password = self.password_entry.get()
-        
+        self.backend = controller.Backend(email, self.filepath)
+        self.email = email
         # Email not entered / password not entered
         if not email or not password:
             messagebox.showerror('Login Error', 'Email and password cannot be empty')
@@ -57,7 +68,7 @@ class GUIUniApp:
             messagebox.showerror('Login Error', 'Invalid credentials')
 
     def authenticate(self, email, password):
-        student = self.student_data.get('students', {}).get(email)
+        student = self.student_data.get(email) 
         return student and student['password'] == password
 
     def open_enrollment_window(self):
@@ -69,8 +80,19 @@ class GUIUniApp:
         tk.Label(self.enrollment_window, text='Select Subject to Enroll:', font=('Arial', 14), bg='#252934', fg='#FFFFFF').pack(pady=20)
         
         # Subjects list
-        self.subjects_list = ['Mathematics', 'Science', 'History', 'English', 'Biology', 'Chemistry', 'Physics', 'Art']
-        self.enrolled_subjects = []
+        self.subjects_list = [] # init list
+        for i in range(10):
+            self.subjects_list.append(self.subjects.Gen_SubjectID())
+        
+        self.enrolled_subjects = [] # change to current subjects already
+        students = self.data_controller.get_student_data()
+
+        if 'subjects' not in students[self.email]:
+            students[self.email]['subjects'] = []
+        
+        for i in range(len(students[self.email]['subjects'])):
+            self.enrolled_subjects.append(students[self.email]['subjects'][i]['subject'])
+
         for subject in self.subjects_list:
             button = tk.Button(self.enrollment_window, text=f'Enroll in {subject}', command=lambda subj=subject: self.enroll_subject(subj), bg='#4A5664', fg='#FFFFFF', relief='flat')
             button.pack(pady=5)
@@ -80,14 +102,44 @@ class GUIUniApp:
 
         self.root.withdraw()
 
+    def save_data(self, data=None):
+        if data is not None:
+            self.data = data
+        with open(self.filepath, 'w') as file:
+            json.dump(self.data, file, indent=2)
+            print("Data saved to file.")
+    
+    def update_student_data(self, student_data):
+        self.data['students'] = student_data
+        self.save_data()
+
     def enroll_subject(self, subject):
+
+        all_students_data = self.db.read()
+        student_data = all_students_data['students'][self.email]
+
+        if 'subjects' not in student_data:
+            student_data['subjects'] = []
+
+        # Read current amount of subjects already enrolled
         if len(self.enrolled_subjects) >= 4:
             messagebox.showerror('Enrollment Error', 'Cannot enroll in more than 4 subjects')
             return
         if subject in self.enrolled_subjects:
             messagebox.showinfo('Enrollment Info', 'Already enrolled in this subject')
             return
+
+        student_data['subjects'].append(subject)
+        all_students_data[self.email] = student_data
+
         self.enrolled_subjects.append(subject)
+
+        student_data['subjects'].append(subject)
+        mark, grade = self.subjects.Gen_Results()
+
+        student_data['subjects'].append({'subject': subject, 'mark': mark, 'grade': grade})
+        self.db.write(all_students_data)
+        
         messagebox.showinfo('Enrollment Success', f'Successfully enrolled in {subject}')
 
     def manage_enrollment(self):
@@ -112,6 +164,36 @@ class GUIUniApp:
             messagebox.showinfo('Update', f'{subject} has been removed from your enrollment list')
             self.manage_window.destroy()  # Refresh the manage enrollment window
             self.manage_enrollment()  # Reopen to update the list
+
+    def remove_subject(self, subject):
+        # Load the full data
+        all_students_data = self.db.read()
+        student_data = all_students_data['students'].get(self.email)
+
+        if not student_data or 'subjects' not in student_data:
+            messagebox.showerror('Error', 'No subjects found for removal.')
+            return
+
+        # Find the subject to remove
+        subjects = student_data['subjects']
+        subject_to_remove = next((s for s in subjects if s['subject'] == subject), None)
+
+        if subject_to_remove:
+            # Remove the subject
+            subjects.remove(subject_to_remove)
+            self.enrolled_subjects.remove(subject)
+            messagebox.showinfo('Update', f'{subject} has been removed from your enrollment list')
+
+            # Save the updated data back to the file
+            self.db.write(all_students_data)
+
+            # Optionally, refresh or update your GUI if needed
+            self.manage_window.destroy()  # Refresh the manage enrollment window
+            self.manage_enrollment()  # Reopen to update the list
+        
+        else:
+            messagebox.showerror('Error', 'Subject not found in your enrollment list.')
+
 
 if __name__ == "__main__":
     root = tk.Tk()
